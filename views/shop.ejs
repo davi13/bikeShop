@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Practice</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/a7ec7986bf.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row" id="panier-header">
+            <div class="col-12">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <span>My Basket</span>
+            </div>
+      </div>
+      <nav id="card-breadcrumb" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Shop</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Basket</li>
+            </ol>
+        </nav>
+        <h1>Basket</h1>
+        <div class="row card-basket">
+            <div class="col-5 col-sm-3"><span>Picture</span></div>
+            <div class="col-4 d-none d-sm-block"><span>Model</span></div>
+            <div class="col-3 col-sm-2"><span>Quantity</span></div>
+            <div class="col-2 col-sm-1"><span>Price</span></div>
+            <div class="col-1 d-none d-sm-block"><span>Total</span></div>
+            <div class="col-2 col-sm-1"><span>Suppr</span></div>
+        </div>
+        <% var totalCmd = 0; 
+        for (var i = 0; i < shopBasket.length; i++ ){
+            totalCmd = totalCmd + (shopBasket[i].price * shopBasket[i].quantity);
+        %>
+        <div class="row card-product">
+            <div class="col-5 col-sm-3" ><img src="<%= shopBasket[i].url%>" alt="bike" class="img-basket"></div>
+            <div class="col-4 d-none d-sm-block"><span><%= shopBasket[i].name%></span></div>
+            <div class="col-3 col-sm-2">
+            <form action="/updateQuantity" method="POST">
+                <div class="row">
+                    <div class="col-8">
+                        <input type="text" name="quantity" value="<%= shopBasket[i].quantity %>" class="form-control form-control-sm">
+                        <input type="hidden" name="position" value="<%= i%>" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-outline-info btn-sm" name="button">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>    
+            </div>
+            <div class="col-2 col-sm-1"><span><%= shopBasket[i].price%>€</span></div>
+            <div class="col-1  d-none d-sm-block"><span><%= shopBasket[i].price * shopBasket[i].quantity %>€</span></div>
+            <div class="col-2 col-sm-1">
+                <a href="/delete?position=<%=i%>" class="btn btn-outline-info btn-sm" name="button"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+            </div>
+        </div>
+        <%
+        }
+        %>
+        <div class="row" id="card-total">
+                <div class="col-8 col-sm-10 text-right"><span>Total basket:</span> </div>
+                <div class="col-4 col-sm-2"><span><%= totalCmd%>€</span></div>
+                
+        </div>
+       
+        <div class="row" id="card-checkout">
+
+            <div class="col-12 text-right">
+                <!--<button type="button" class="btn btn-outline-info btn-sm" name="button">Checkout</button></div>-->
+            <form action="payment" method="POST">
+                    <script
+                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="pk_test_vDHF7DdgWAxNn79Q8xAh951I"
+                      data-amount="<%= totalCmd*100 %>"
+                      data-name="Bike Shop"
+                      data-description="checkout"
+                      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                      data-locale="auto"
+                      data-zip-code="false">
+                    </script>
+                  </form>
+         </div>
+  </div>  
+</body>
+</html>
